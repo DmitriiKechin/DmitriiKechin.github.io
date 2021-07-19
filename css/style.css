@@ -1,0 +1,69 @@
+body {
+  background-color: black;
+}
+
+.board {
+  margin: 100px auto;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0px 8px 5px -5px white, 8px 0px 5px -5px white,
+    0px -8px 5px -5px white, -8px 0px 5px -5px white;
+  position: relative;
+}
+
+.sign_x {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.sign_x::after,
+.sign_x::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  box-shadow: 0px 0px 5px 3px red;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.sign_x::before {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.sign_o {
+  width: 90%;
+  height: 90%;
+  box-shadow: 0px 0px 5px 3px #09de09;
+  border-radius: 50%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sign_o::after,
+.sign_o::before {
+  content: "";
+  height: 97%;
+  width: 97%;
+  border-radius: 50%;
+  border: 1px solid white;
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sign_o::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  box-shadow: inset 0px 0px 5px 3px #09de09;
+}
