@@ -1,5 +1,8 @@
 const { log } = console;
-window.addEventListener('load', startGame(9));
+
+let isFirstPlayer = true;
+
+window.addEventListener('load', startGame(3));
 function startGame(boardSize) {
   const board = document.createElement('div');
   board.classList.add('board');
@@ -11,6 +14,8 @@ function startGame(boardSize) {
   board.innerHTML = createBoard(boardSize);
   board.prepend(boardGrid);
   boardGrid.innerHTML = createBoardGrid(boardSize);
+
+  board.addEventListener('click', clickCell);
 }
 
 function createBoard(boardSize) {
@@ -49,4 +54,23 @@ function createBoardGrid(boardSize) {
         ></div>`);
   }
   return innerText.join('');
+}
+
+function clickCell(event) {
+  let cell = event.target.closest('.board__cell');
+  if (!cell) return;
+
+  if (cell.closest('.sign_x')) return;
+  if (cell.closest('.sign_o')) return;
+
+  click(cell, isFirstPlayer);
+  isFirstPlayer = !isFirstPlayer;
+}
+
+function click(target, isFirstPlayer) {
+  if (isFirstPlayer) {
+    target.classList.add('sign_x');
+  } else {
+    target.classList.add('sign_o');
+  }
 }
