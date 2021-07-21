@@ -1,10 +1,17 @@
 export { isWinner };
 function isWinner(boardMatrix, isFirstPlayer) {
   const size = boardMatrix.length;
+  let lineSize;
+  if (size < 5) {
+    lineSize = 3;
+  } else {
+    lineSize = 4;
+  }
+  console.log('lineSize : ', lineSize);
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
       if (boardMatrix[row][col]) {
-        if (searchVictoryLine(boardMatrix, row, col, 4)) {
+        if (searchVictoryLine(boardMatrix, row, col, lineSize)) {
           console.log('searchVictiryLine: true');
           return true;
         }

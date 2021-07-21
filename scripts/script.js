@@ -5,7 +5,7 @@ import { isWinner } from './victory.js';
 let isFirstPlayer = true;
 let boardMatrix = [];
 
-window.addEventListener('load', startGame(5));
+window.addEventListener('load', startGame(3));
 function startGame(boardSize) {
   const board = document.createElement('div');
   board.classList.add('board');
