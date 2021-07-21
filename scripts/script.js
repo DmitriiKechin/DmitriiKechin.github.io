@@ -1,5 +1,7 @@
 const { log } = console;
 
+import { isWinner } from './victory.js';
+
 let isFirstPlayer = true;
 let boardMatrix = [];
 
@@ -68,24 +70,26 @@ function clickCell(event) {
 
   click(cell, isFirstPlayer);
   isFirstPlayer = !isFirstPlayer;
-
-  log(boardMatrix);
 }
 
 function click(target, isFirstPlayer) {
   const row = target.dataset.row;
   const col = target.dataset.col;
-  console.log('col: ', col);
 
-  console.log('row: ', row);
   if (isFirstPlayer) {
     target.classList.add('sign_x');
-    boardMatrix[row][col] = 1;
+    boardMatrix[row][col] = 'x';
   } else {
     target.classList.add('sign_o');
-    boardMatrix[row][col] = 0;
+    boardMatrix[row][col] = 'o';
   }
+
   target.style.cursor = 'auto';
+
+  if (isWinner(boardMatrix, isFirstPlayer)) {
+    log('Победа');
+    log(boardMatrix);
+  }
 }
 
 function createBoardMatrix(boardSize) {
