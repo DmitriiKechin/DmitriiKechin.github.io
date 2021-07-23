@@ -1,11 +1,12 @@
 const { log } = console;
 
 import { isWinner } from './victory.js';
+import { aiMove } from './AI.js';
 
 let isFirstPlayer = true;
 let boardMatrix = [];
 
-window.addEventListener('load', startGame(3));
+window.addEventListener('load', startGame(7));
 function startGame(boardSize) {
   const board = document.createElement('div');
   board.classList.add('board');
@@ -86,9 +87,22 @@ function click(target, isFirstPlayer) {
 
   target.style.cursor = 'auto';
 
+  /*##############################
+#############testAI#############
+###############################*/
+
+  boardMatrix = [
+    ['x', '', '', '', '', '', ''],
+    ['x', 'x', 'x', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+  ];
+  aiMove(boardMatrix);
   if (isWinner(boardMatrix, isFirstPlayer)) {
     log('Победа');
-    log(boardMatrix);
   }
 }
 

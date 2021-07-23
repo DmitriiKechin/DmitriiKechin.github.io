@@ -7,7 +7,7 @@ function isWinner(boardMatrix, isFirstPlayer) {
   } else {
     lineSize = 4;
   }
-  console.log('lineSize : ', lineSize);
+
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
       if (boardMatrix[row][col]) {
