@@ -5,14 +5,13 @@ function isWinner(boardMatrix, isFirstPlayer) {
   if (size < 5) {
     lineSize = 3;
   } else {
-    lineSize = 4;
+    lineSize = 5;
   }
 
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
       if (boardMatrix[row][col]) {
         if (searchVictoryLine(boardMatrix, row, col, lineSize)) {
-          console.log('searchVictiryLine: true');
           return true;
         }
       }

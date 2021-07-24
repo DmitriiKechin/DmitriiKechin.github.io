@@ -13,7 +13,6 @@ function aiMove(boardMatrix) {
     for (let col = 0; col < sizeRow; col++) {
       if (!boardMatrix[row][col]) {
         let weight = weightСell(row, col, boardMatrix);
-
         if (result.weight < weight) {
           result.weight = weight;
           result.row = row;
@@ -27,35 +26,94 @@ function aiMove(boardMatrix) {
 
 function weightСell(row, col, boardMatrix) {
   let arr = [];
-
-  let weight = 0;
+  let numberMainElement = 0;
+  let weight = [0, 0];
   let number = 0;
+
   for (let i = -5; i <= 6; i++) {
     if (col + i >= 0 && col + i < boardMatrix[0].length) {
       arr.push(boardMatrix[row][col + i]);
-
       if (i === 0) {
-        const numberMainElement = number;
+        numberMainElement = number;
       }
       number++;
     }
   }
+  weigthSum(weigthCalc(arr, numberMainElement));
 
-  weight += weigthCalc(arr, numberMainElement);
+  removeCount();
+  for (let i = -5; i <= 6; i++) {
+    if (row + i >= 0 && row + i < boardMatrix.length) {
+      arr.push(boardMatrix[row + i][col]);
+      if (i === 0) {
+        numberMainElement = number;
+      }
+      number++;
+    }
+  }
+  weigthSum(weigthCalc(arr, numberMainElement));
 
-  return weight;
+  removeCount();
+  for (let i = -5; i <= 6; i++) {
+    if (
+      row + i >= 0 &&
+      row + i < boardMatrix.length &&
+      col + i >= 0 &&
+      col + i < boardMatrix[0].length
+    ) {
+      arr.push(boardMatrix[row + i][col + i]);
+      if (i === 0) {
+        numberMainElement = number;
+      }
+      number++;
+    }
+  }
+  weigthSum(weigthCalc(arr, numberMainElement));
+
+  removeCount();
+  for (let i = -5; i <= 6; i++) {
+    if (
+      row - i >= 0 &&
+      row - i < boardMatrix.length &&
+      col + i >= 0 &&
+      col + i < boardMatrix[0].length
+    ) {
+      arr.push(boardMatrix[row - i][col + i]);
+      if (i === 0) {
+        numberMainElement = number;
+      }
+      number++;
+    }
+  }
+  weigthSum(weigthCalc(arr, numberMainElement));
+
+  if (weight[0] >= 14) {
+    weight[0] *= 2;
+  }
+  if (weight[1] >= 14) {
+    weight[1] *= 2;
+  }
+
+  return weight[0] + weight[1];
+
+  function removeCount() {
+    arr = [];
+    numberMainElement = 0;
+    number = 0;
+  }
+
+  function weigthSum(arrWeight) {
+    weight[0] += arrWeight[0];
+    weight[1] += arrWeight[1];
+  }
 }
 
 function weigthCalc(arr, numberMainElement) {
-  return (
-    weigthCalcSign(arr, numberMainElement, 'x') +
-    weigthCalcSign(arr, numberMainElement, 'o')
-  );
+  return [
+    weigthCalcSign(arr, numberMainElement, 'x'),
+    weigthCalcSign(arr, numberMainElement, 'o'),
+  ];
 }
-
-const arr = ['o', 'x', '', 'x', 'x', '', 'x', 'x', 'o', 'x'];
-console.log('arr: ', arr);
-console.log(weigthCalcSign(arr, 2, 'x'));
 
 function weigthCalcSign(arr, numberMainElement, sign) {
   let elementProhibition;
@@ -99,7 +157,6 @@ function weigthCalcSign(arr, numberMainElement, sign) {
     }
 
     if (arr[i] === sign && !isStartAttack & isEndAttack) {
-      console.log('good');
       result.push(attack);
       removeAttack();
       isEndAttack = false;
@@ -194,8 +251,6 @@ function weightCalcArrAttack(arrAttack) {
   ATTACK_WEIGHT[5][0] = 200;
 
   let result = 0;
-
-  console.log('arrAttack: ', arrAttack);
 
   arrAttack.forEach((attack, i, arr) => {
     if (attack.isMain) {
