@@ -2,11 +2,14 @@ const { log } = console;
 
 import { isWinner } from './victory.js';
 import { aiMove } from './AI.js';
+import { createBoard, createBoardGrid, createBoardMatrix } from './GameUI.js';
 
+const boardSize = 11;
 let isFirstPlayer = true;
-let boardMatrix = [];
+const boardMatrix = createBoardMatrix(boardSize);
+const moveAI = new Event('click', { bubbles: true });
 
-window.addEventListener('load', startGame(11));
+window.addEventListener('load', startGame(boardSize));
 function startGame(boardSize) {
   const board = document.createElement('div');
   board.classList.add('board');
@@ -19,47 +22,7 @@ function startGame(boardSize) {
   board.prepend(boardGrid);
   boardGrid.innerHTML = createBoardGrid(boardSize);
 
-  createBoardMatrix(boardSize);
-
   board.addEventListener('click', clickCell);
-}
-
-function createBoard(boardSize) {
-  const innerText = [];
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
-      innerText.push(`
-			<div
-			class="board__cell"
-			data-row="${i}"
-			data-col="${j}"
-			style="grid-row: ${i + 1}; grid-column: ${j + 1};"
-		>
-				</div>`);
-    }
-  }
-
-  return innerText.join('');
-}
-
-function createBoardGrid(boardSize) {
-  const innerText = [];
-
-  for (let i = 0; i < boardSize + 1; i++) {
-    innerText.push(`
-			<div
-          class="board__line-horizon"
-          style="grid-row: ${i + 1}; 
-					grid-column: 1/span ${boardSize + 1};"
-					${i === 0 || i === boardSize ? `hidden` : ``}
-        ></div>
-        <div
-          class="board__line-vertical"
-          style="grid-row: 1/span ${boardSize + 1}; grid-column: ${i + 1};"
-					${i === 0 || i === boardSize ? `hidden` : ``}
-        ></div>`);
-  }
-  return innerText.join('');
 }
 
 function clickCell(event) {
@@ -87,24 +50,20 @@ function click(target, isFirstPlayer) {
 
   target.style.cursor = 'auto';
 
-  /*##############################
-#############testAI#############
-###############################*/
-
-  log(aiMove(boardMatrix));
-
   if (isWinner(boardMatrix, isFirstPlayer)) {
     log('Победа');
   }
+  setTimeout(clickAI, 0);
 }
 
-function createBoardMatrix(boardSize) {
-  let matrixRow = [];
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
-      matrixRow.push('');
-    }
-    boardMatrix.push(matrixRow);
-    matrixRow = [];
+function clickAI() {
+  if (!isFirstPlayer) {
+    const move = aiMove(boardMatrix);
+    console.log('move: ', move);
+    let elem = [...document.querySelectorAll(`[data-row="${move.row}"]`)];
+    elem = elem.filter((item) => item.dataset.col == move.col);
+
+    console.log('elem: ', elem[0]);
+    elem[0].dispatchEvent(moveAI);
   }
 }
