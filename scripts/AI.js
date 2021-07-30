@@ -13,7 +13,7 @@ function aiMove(boardMatrix) {
     for (let col = 0; col < sizeRow; col++) {
       if (!boardMatrix[row][col]) {
         let weight = weightСell(row, col, boardMatrix);
-        if (result.weight < weight) {
+        if (result.weight <= weight) {
           result.weight = weight;
           result.row = row;
           result.col = col;

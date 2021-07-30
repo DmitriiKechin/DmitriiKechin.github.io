@@ -4,6 +4,26 @@
 
 body {
   background-color: black;
+  font-family: 'Tourney', Arial, cursive;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+.game {
+  flex: 1 1 100%;
+  height: 100%;
 }
 
 .board {
@@ -15,8 +35,8 @@ body {
   grid-gap: 3px;
   position: relative;
   margin: 100px auto;
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
   background: black;
   box-shadow: 0px 0px 6px 5px black;
 }
@@ -58,66 +78,104 @@ body {
   border-radius: 10px;
 }
 
-.sign_x {
-  width: 75%;
-  height: 75%;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.sign_x::after,
-.sign_x::before {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 5px;
-  box-shadow: 0px 0px 10px 5px red;
-  border-radius: 10px;
-  background-color: white;
+.border {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
+  top: 0;
+  left: 0;
 }
 
-.sign_x::before {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.sign_o {
-  width: 54%;
-  height: 54%;
-  box-shadow: 0px 0px 10px 5px #09de09;
-  border-radius: 50%;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.sign_o::after,
-.sign_o::before {
-  content: '';
-  height: calc(100% - 5px);
-  width: calc(100% - 5px);
-  border-radius: 50%;
-  display: inline-block;
+.circle,
+.cross {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.sign_o::before {
-  content: '';
   height: 100%;
   width: 100%;
-  box-shadow: inset 0px 0px 10px 5px #09de09;
 }
 
-.sign_o::after {
-  border: 5px solid white;
+.startMenu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  height: 850px;
+  padding: 11%;
+}
+
+.startMenuTitle {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.startMenuTitle__item {
+  position: relative;
+  width: 32%;
+  margin: 0 2%;
+}
+
+.startMenuTitle__text {
+  color: white;
+  font-weight: 200;
+  font-size: 60px;
+}
+
+.startMenuTitle__text::before,
+.gameButton::before {
+  content: 'VS';
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: 900;
+  color: transparent;
+  z-index: -1;
+  text-shadow: 0 0 10px blue;
+}
+
+.gameButton {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  width: 80%;
+  font-weight: 200;
+  font-size: 0;
+  color: transparent;
+  user-select: none;
+  transition: font-weight 0.1s, color 1s, font-size 0.5s linear;
+}
+
+.gameButton::before {
+  content: attr(data-title);
+  text-align: center;
+  width: 100%;
+}
+
+.gameButton:hover {
+  font-weight: 400;
+}
+.gameButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  height: 0;
+  transition: height 0.5s;
+}
+
+.gameButton:hover::after {
+  background-color: blue;
+  height: 30%;
+  width: 100%;
+  border-radius: 70%;
+  filter: blur(25px);
+}
+
+.gameButton:active::after {
+  background-color: blue;
+  height: 80%;
+  width: 100%;
+  border-radius: 70%;
+  filter: blur(25px);
 }
