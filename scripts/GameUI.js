@@ -7,11 +7,11 @@ export {
   animationBorder,
 };
 
-function createBoard(boardSize) {
+function createBoard(boardSizeRow, boardSizeCol) {
   const innerText = [];
 
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
+  for (let i = 0; i < boardSizeRow; i++) {
+    for (let j = 0; j < boardSizeCol; j++) {
       innerText.push(`
 			<div
 			class="board__cell"
@@ -26,31 +26,45 @@ function createBoard(boardSize) {
   return innerText.join('');
 }
 
-function createBoardGrid(boardSize) {
+function createBoardGrid(boardSizeRow, boardSizeCol) {
   const innerText = [];
 
-  for (let i = 0; i < boardSize + 1; i++) {
+  for (
+    let row = 0, col = 0, i = 0;
+    i < Math.max(boardSizeRow, boardSizeCol) + 1;
+    i++
+  ) {
+    console.log(row);
+    console.log(col);
     innerText.push(`
 			<div
           class="board__line-horizon"
-          style="grid-row: ${i + 1}; 
-					grid-column: 1/span ${boardSize + 1};"
-					${i === 0 || i === boardSize ? `hidden` : ``}
+          style="grid-row: ${row + 1}; 
+					grid-column: 1/span ${boardSizeCol + 1};"
+					${row === 0 || row === boardSizeRow ? `hidden` : ``}
         ></div>
         <div
           class="board__line-vertical"
-          style="grid-row: 1/span ${boardSize + 1}; grid-column: ${i + 1};"
-					${i === 0 || i === boardSize ? `hidden` : ``}
+          style="grid-row: 1/span ${boardSizeRow + 1}; grid-column: ${col + 1};"
+					${col === 0 || col === boardSizeCol ? `hidden` : ``}
         ></div>`);
+
+    if (row < boardSizeRow) {
+      row++;
+    }
+
+    if (col < boardSizeCol) {
+      col++;
+    }
   }
   return innerText.join('');
 }
 
-function createBoardMatrix(boardSize) {
+function createBoardMatrix(boardSizeRow, boardSizeCol) {
   let matrixRow = [];
   const boardMatrix = [];
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
+  for (let i = 0; i < boardSizeRow; i++) {
+    for (let j = 0; j < boardSizeCol; j++) {
       matrixRow.push('');
     }
     boardMatrix.push(matrixRow);
