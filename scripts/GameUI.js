@@ -5,6 +5,8 @@ export {
   createSignO,
   createSignX,
   animationBorder,
+  animationBoardGrid,
+  createBackground,
 };
 
 function createBoard(boardSizeRow, boardSizeCol) {
@@ -34,8 +36,6 @@ function createBoardGrid(boardSizeRow, boardSizeCol) {
     i < Math.max(boardSizeRow, boardSizeCol) + 1;
     i++
   ) {
-    console.log(row);
-    console.log(col);
     innerText.push(`
 			<div
           class="board__line-horizon"
@@ -58,6 +58,23 @@ function createBoardGrid(boardSizeRow, boardSizeCol) {
     }
   }
   return innerText.join('');
+}
+
+function animationBoardGrid() {
+  const cols = document.querySelectorAll('.board__line-vertical');
+  const rows = document.querySelectorAll('.board__line-horizon');
+  let time = 0;
+  cols.forEach((elem) =>
+    setTimeout(() => {
+      elem.style.height = '100%';
+    }, (time += 200))
+  );
+  time = 0;
+  rows.forEach((elem) =>
+    setTimeout(() => {
+      elem.style.width = '100%';
+    }, (time += 200))
+  );
 }
 
 function createBoardMatrix(boardSizeRow, boardSizeCol) {
@@ -171,7 +188,7 @@ function createSignO(animationDuration) {
   ligth += '" />';
 
   return `
-	<svg class="circle" viewBox="0 0 100 100">
+	<svg class="circle" viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg">
 	<filter id="Gauss">
   <feGaussianBlur stdDeviation="5"></feGaussianBlur>
@@ -184,7 +201,7 @@ function createSignO(animationDuration) {
 function createSignX(animationDuration) {
   const dur = animationDuration / 2 + 's';
   return `
-	<svg  class="cross" viewBox="0 0 100 100">
+	<svg  class="cross" viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg">
     <filter id="Gauss">
   <feGaussianBlur stdDeviation="5"></feGaussianBlur>
@@ -255,7 +272,9 @@ function animationBorder(element, duration) {
   const width = element.offsetWidth;
 
   element.innerHTML += `
-  <svg class="border" viewBox="0 0 ${width} ${height}" height="100%" width="100%" preserveAspectRatio="none"> 
+  <svg class="border" viewBox="0 0 ${width} ${height}"
+	 height="100%" width="100%" preserveAspectRatio="none"
+	 xmlns="http://www.w3.org/2000/svg" > 
   
   <filter id="Gauss">
     <feGaussianBlur stdDeviation="5"></feGaussianBlur>
@@ -273,7 +292,7 @@ function animationBorder(element, duration) {
     2 * (width - 20 + height - 20)
   };0"/> </rect>
     
-     <rect class="lineLigth" x="10" y="10"width="${width - 20}" height="${
+     <rect class="lineLigth" x="10" y="10" width="${width - 20}" height="${
     height - 20
   }" rx="20" ry="20"  
         stroke="white" stroke-width="2" stroke-linecap="round" fill="none" 
@@ -285,4 +304,104 @@ function animationBorder(element, duration) {
     2 * (width - 20 + height - 20)
   };0"/> </rect>
   </svg>`;
+}
+
+function createBackground() {
+  const height = document.body.offsetHeight;
+  console.log('height: ', height);
+  const width = document.body.offsetWidth;
+  console.log('width: ', width);
+
+  const numberLines = Math.round(Math.max(height, width) / 13.25);
+
+  const background = document.createElement('div');
+  const backgroundBlur = document.createElement('div');
+  background.classList.add('background');
+  backgroundBlur.classList.add('background__blur');
+
+  let lines = '';
+  let linesBlur = '';
+  const colors = ['red', 'blue', '#09de09'];
+  let isHorizon = false;
+
+  for (let i = 0; i < numberLines; i++) {
+    isHorizon = random(0, 1);
+
+    let x0 = random(0, width);
+    let y0 = random(0, height);
+    let x1;
+    let y1;
+
+    if (x0 - width / 3 > 0 && x0 + width / 3 < width) {
+      x1 = random(x0 - width / 3, x0 + width / 3);
+    }
+    if (x0 - width / 3 < 0 && x0 + width / 3 < width) {
+      x1 = random(0, x0 + width / 3);
+    }
+    if (x0 - width / 3 > 0 && x0 + width / 3 > width) {
+      x1 = random(x0 - width / 3, width);
+    }
+
+    if (y0 - height / 3 > 0 && y0 + height / 3 < height) {
+      y1 = random(y0 - height / 3, y0 + height / 3);
+    }
+    if (y0 - height / 3 < 0 && y0 + height / 3 < height) {
+      y1 = random(0, y0 + height / 3);
+    }
+    if (y0 - height / 3 > 0 && y0 + height / 3 > height) {
+      y1 = random(y0 - height / 3, height);
+    }
+
+    if (isHorizon) {
+      linesBlur += `
+			<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" 
+			 stroke="${colors[random(0, 2)]}" stroke-width="10" 
+			stroke-linecap="round"	fill="none" 
+			vector-effect="non-scaling-stroke" />`;
+
+      lines += `
+			<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" 
+			stroke="white" stroke-width="5" stroke-linecap="round"
+			vector-effect="non-scaling-stroke" />
+`;
+    } else {
+      linesBlur += `
+			<line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y1}" 
+			 stroke="${colors[random(0, 2)]}" stroke-width="10" 
+			stroke-linecap="round"	fill="none" 
+			vector-effect="non-scaling-stroke" />`;
+
+      lines += `
+			<line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y1}" 
+			stroke="white" stroke-width="5" stroke-linecap="round"
+			vector-effect="non-scaling-stroke" />
+			`;
+    }
+  }
+
+  background.innerHTML = `
+	
+	  <svg class="border" viewBox="0 0 ${width} ${height}"
+	height="100%" width="100%" preserveAspectRatio="none"
+	xmlns="http://www.w3.org/2000/svg">
+${lines}
+	</svg>
+	`;
+  backgroundBlur.innerHTML = `
+	
+	<svg class="border" viewBox="0 0 ${width} ${height}"
+height="100%" width="100%" preserveAspectRatio="none"
+xmlns="http://www.w3.org/2000/svg">
+${linesBlur}
+</svg>
+`;
+
+  document.body.append(background);
+  background.append(backgroundBlur);
+
+  function random(minVal, maxVal) {
+    let min = Math.ceil(minVal);
+    let max = Math.floor(maxVal);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 }

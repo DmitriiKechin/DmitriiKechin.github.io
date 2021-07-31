@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: black;
+  background-color: #222;
   font-family: 'Tourney', Arial, cursive;
 }
 html,
@@ -21,7 +21,40 @@ body {
   width: 100%;
   height: 100%;
 }
+
+.background {
+  filter: blur(9px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.background__blur {
+  filter: blur(10px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
 .game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1 1 100%;
   height: 100%;
 }
@@ -37,11 +70,10 @@ body {
   margin: 100px auto;
   width: 100%;
   height: 100%;
-  background: black;
-  box-shadow: 0px 0px 6px 5px black;
 }
 
 .board__grid-line {
+  filter: blur(1px);
   display: grid;
   justify-items: center;
   align-items: center;
@@ -62,20 +94,24 @@ body {
   cursor: pointer;
 }
 
-.board__line-horizon {
-  height: 3px;
-  width: 100%;
+.board__line-horizon,
+.board__line-vertical {
+  position: relative;
   background-color: white;
-  box-shadow: 0px 0px 10px 5px blue;
+  box-shadow: 0px 0px 7px 2px blue;
   border-radius: 10px;
 }
 
+.board__line-horizon {
+  height: 2px;
+  width: 0;
+  transition: width 2s;
+}
+
 .board__line-vertical {
-  height: 100%;
-  width: 3px;
-  background-color: white;
-  box-shadow: 0px 0px 10px 5px blue;
-  border-radius: 10px;
+  height: 0;
+  width: 2px;
+  transition: height 2s;
 }
 
 .border {
@@ -98,7 +134,7 @@ body {
   align-items: center;
   width: 500px;
   height: 850px;
-  padding: 11%;
+  padding: 15px;
 }
 
 .startMenuTitle {

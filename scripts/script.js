@@ -9,21 +9,23 @@ import {
   createSignO,
   createSignX,
   animationBorder,
+  animationBoardGrid,
+  createBackground,
 } from './GameUI.js';
 
 const ANIMATION_DURATION = 0.5;
 const signO = createSignO(ANIMATION_DURATION);
 const signX = createSignX(ANIMATION_DURATION);
 
-const boardSize = 5;
+let boardMatrix = [];
 let isFirstPlayer = true;
-const boardMatrix = createBoardMatrix(boardSize);
 const moveAI = new Event('click', { bubbles: true });
 let moveAIFinish = true;
 
 window.addEventListener('load', loadStartMenu());
 
 function loadStartMenu() {
+  createBackground();
   const page = document.getElementById('game');
 
   const startMenu = document.createElement('div');
@@ -64,13 +66,15 @@ function loadStartMenu() {
     createButtonGame(classicGameButton, 'Classic Game');
   }, 1500);
   setTimeout(() => {
-    createButtonGame(mediumGameButton, '5 in row medium');
+    createButtonGame(mediumGameButton, '5 in row');
   }, 3500);
   setTimeout(() => {
-    createButtonGame(largeGameButton, '5 in row large');
+    createButtonGame(largeGameButton, '5 in row BIG');
   }, 5500);
 
   classicGameButton.addEventListener('click', startClassicGame);
+  mediumGameButton.addEventListener('click', startMediumGame);
+  largeGameButton.addEventListener('click', startlargeGame);
 
   function createButtonGame(elem, textContent) {
     elem.classList.add('gameButton');
@@ -87,19 +91,54 @@ function loadStartMenu() {
     animationBorder(elem, '1s');
   }
 }
+
 function startClassicGame() {
   const page = document.getElementById('game');
 
-  const startmenu = document.querySelector('.startMenu');
-  startmenu.remove();
-  startGame(page, 3);
+  const startMenu = document.querySelector('.startMenu');
+  startMenu.remove();
+
+  startGame(page, 3, 3);
+  boardMatrix = createBoardMatrix(3, 3);
 
   const board = document.querySelector('.board');
   board.style.maxWidth = '450px';
   board.style.maxHeight = '450px';
+  setTimeout(animationBoardGrid, 0);
 }
 
-function startGame(element, boardSize) {
+function startMediumGame() {
+  const page = document.getElementById('game');
+
+  const startMenu = document.querySelector('.startMenu');
+  startMenu.remove();
+
+  startGame(page, 9, 9);
+  boardMatrix = createBoardMatrix(9, 9);
+
+  const board = document.querySelector('.board');
+  board.style.maxWidth = '550px';
+  board.style.maxHeight = '550px';
+
+  setTimeout(animationBoardGrid, 0);
+}
+
+function startlargeGame() {
+  const page = document.getElementById('game');
+
+  const startMenu = document.querySelector('.startMenu');
+  startMenu.remove();
+
+  const row = Math.round(page.offsetHeight / 70);
+  const col = Math.round(page.offsetWidth / 70);
+
+  startGame(page, row, col);
+  boardMatrix = createBoardMatrix(row, col);
+
+  setTimeout(animationBoardGrid, 0);
+}
+
+function startGame(element, boardSizeRow, boardSizeCol) {
   const board = document.createElement('div');
   board.classList.add('board');
 
@@ -107,9 +146,9 @@ function startGame(element, boardSize) {
   boardGrid.classList.add('board__grid-line');
 
   element.append(board);
-  board.innerHTML = createBoard(boardSize);
+  board.innerHTML = createBoard(boardSizeRow, boardSizeCol);
   board.prepend(boardGrid);
-  boardGrid.innerHTML = createBoardGrid(boardSize);
+  boardGrid.innerHTML = createBoardGrid(boardSizeRow, boardSizeCol);
 
   board.addEventListener('click', clickCell);
 }
@@ -133,10 +172,11 @@ function click(target, isFirstPlayer) {
   const col = target.dataset.col;
 
   target.dataset.isEmpty = true;
-
+  console.log('boardMatrix: ', boardMatrix);
   if (isFirstPlayer) {
     target.innerHTML = signX;
     boardMatrix[row][col] = 'x';
+
     moveAIFinish = false;
   } else {
     target.innerHTML = signO;
@@ -154,11 +194,10 @@ function click(target, isFirstPlayer) {
 function clickAI() {
   if (!isFirstPlayer) {
     const move = aiMove(boardMatrix);
-    console.log('move: ', move);
+
     let elem = [...document.querySelectorAll(`[data-row="${move.row}"]`)];
     elem = elem.filter((item) => item.dataset.col == move.col);
 
-    console.log('elem: ', elem[0]);
     moveAIFinish = true;
     elem[0].dispatchEvent(moveAI);
     moveAIFinish = false;
@@ -167,3 +206,22 @@ function clickAI() {
     }, ANIMATION_DURATION * 1000);
   }
 }
+
+window.addEventListener(
+  `resize`,
+  (event) => {
+    const startMenu = document.querySelector('.startMenu');
+    const background = document.querySelector('.background');
+
+    if (background) {
+      background.remove();
+      createBackground();
+    }
+
+    if (startMenu) {
+      startMenu.remove();
+      loadStartMenu();
+    }
+  },
+  false
+);
