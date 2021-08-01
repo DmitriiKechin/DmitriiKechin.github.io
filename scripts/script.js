@@ -99,6 +99,7 @@ export function loadStartMenu() {
 }
 
 function startGame(element, boardSizeRow, boardSizeCol) {
+  moveAIFinish = true;
   const board = document.createElement('div');
   board.classList.add('board');
 
@@ -137,7 +138,7 @@ function click(target, isFirstPlayer) {
   const signXMove = createSignX(0.2);
 
   target.dataset.isEmpty = true;
-  console.log('boardMatrix: ', boardMatrix);
+
   if (isFirstPlayer) {
     signMove.innerHTML = signOMove;
     target.innerHTML = signX;
@@ -153,7 +154,10 @@ function click(target, isFirstPlayer) {
   target.style.cursor = 'auto';
 
   if (isWinner(boardMatrix, isFirstPlayer)) {
+    moveAIFinish = false;
+    isFirstPlayer = true;
     log('Победа');
+    return;
   }
   setTimeout(clickAI, ANIMATION_DURATION * 1000);
 }
