@@ -11,6 +11,7 @@ import {
   animationBorder,
   animationBoardGrid,
   createBackground,
+  createMenu,
 } from './GameUI.js';
 
 const ANIMATION_DURATION = 0.5;
@@ -24,14 +25,19 @@ let moveAIFinish = true;
 
 window.addEventListener('load', loadStartMenu());
 
-function loadStartMenu() {
+export function loadStartMenu() {
   createBackground();
   const page = document.getElementById('game');
+  const menu = document.getElementById('game-menu');
+
+  page.innerHTML = '';
+  menu.innerHTML = '';
+  menu.style.width = '0';
 
   const startMenu = document.createElement('div');
   startMenu.classList.add('startMenu');
   page.append(startMenu);
-  animationBorder(startMenu, '1s');
+  animationBorder(startMenu, '1s', 'blue');
 
   const startMenuTitle = document.createElement('div');
   startMenuTitle.classList.add('startMenuTitle');
@@ -88,54 +94,8 @@ function loadStartMenu() {
     elem.textContent = textContent;
     elem.dataset.title = textContent;
     startMenu.append(elem);
-    animationBorder(elem, '1s');
+    animationBorder(elem, '1s', 'blue');
   }
-}
-
-function startClassicGame() {
-  const page = document.getElementById('game');
-
-  const startMenu = document.querySelector('.startMenu');
-  startMenu.remove();
-
-  startGame(page, 3, 3);
-  boardMatrix = createBoardMatrix(3, 3);
-
-  const board = document.querySelector('.board');
-  board.style.maxWidth = '450px';
-  board.style.maxHeight = '450px';
-  setTimeout(animationBoardGrid, 0);
-}
-
-function startMediumGame() {
-  const page = document.getElementById('game');
-
-  const startMenu = document.querySelector('.startMenu');
-  startMenu.remove();
-
-  startGame(page, 9, 9);
-  boardMatrix = createBoardMatrix(9, 9);
-
-  const board = document.querySelector('.board');
-  board.style.maxWidth = '550px';
-  board.style.maxHeight = '550px';
-
-  setTimeout(animationBoardGrid, 0);
-}
-
-function startlargeGame() {
-  const page = document.getElementById('game');
-
-  const startMenu = document.querySelector('.startMenu');
-  startMenu.remove();
-
-  const row = Math.round(page.offsetHeight / 70);
-  const col = Math.round(page.offsetWidth / 70);
-
-  startGame(page, row, col);
-  boardMatrix = createBoardMatrix(row, col);
-
-  setTimeout(animationBoardGrid, 0);
 }
 
 function startGame(element, boardSizeRow, boardSizeCol) {
@@ -171,14 +131,21 @@ function click(target, isFirstPlayer) {
   const row = target.dataset.row;
   const col = target.dataset.col;
 
+  const signMove = document.getElementById('signMore');
+
+  const signOMove = createSignO(0.2);
+  const signXMove = createSignX(0.2);
+
   target.dataset.isEmpty = true;
   console.log('boardMatrix: ', boardMatrix);
   if (isFirstPlayer) {
+    signMove.innerHTML = signOMove;
     target.innerHTML = signX;
     boardMatrix[row][col] = 'x';
 
     moveAIFinish = false;
   } else {
+    signMove.innerHTML = signXMove;
     target.innerHTML = signO;
     boardMatrix[row][col] = 'o';
   }
@@ -225,3 +192,58 @@ window.addEventListener(
   },
   false
 );
+
+function preStartGame() {
+  const page = document.getElementById('game');
+  page.innerHTML = '';
+  const startMenu = document.querySelector('.startMenu');
+  if (startMenu) {
+    startMenu.remove();
+  }
+
+  return page;
+}
+
+function startClassicGame() {
+  createMenu(startClassicGame);
+
+  startGame(preStartGame(), 3, 3);
+  boardMatrix = createBoardMatrix(3, 3);
+
+  const board = document.querySelector('.board');
+  board.style.maxWidth = '450px';
+  board.style.maxHeight = '450px';
+
+  setTimeout(animationBoardGrid, 0);
+}
+
+function startMediumGame() {
+  createMenu(startMediumGame);
+
+  startGame(preStartGame(), 9, 9);
+  boardMatrix = createBoardMatrix(9, 9);
+
+  const board = document.querySelector('.board');
+  board.style.maxWidth = '550px';
+  board.style.maxHeight = '550px';
+
+  setTimeout(animationBoardGrid, 0);
+}
+
+function startlargeGame() {
+  createMenu(startlargeGame);
+
+  const page = preStartGame();
+
+  const row = Math.round((page.offsetHeight * 0.95) / 70);
+  const col = Math.round((page.offsetWidth * 0.95) / 70);
+
+  startGame(page, row, col);
+  boardMatrix = createBoardMatrix(row, col);
+
+  const board = document.querySelector('.board');
+  board.style.maxWidth = '95%';
+  board.style.maxHeight = '95%';
+
+  setTimeout(animationBoardGrid, 0);
+}

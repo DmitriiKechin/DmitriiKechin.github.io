@@ -7,7 +7,10 @@ export {
   animationBorder,
   animationBoardGrid,
   createBackground,
+  createMenu,
 };
+
+import { loadStartMenu } from './script.js';
 
 function createBoard(boardSizeRow, boardSizeCol) {
   const innerText = [];
@@ -190,9 +193,7 @@ function createSignO(animationDuration) {
   return `
 	<svg class="circle" viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg">
-	<filter id="Gauss">
-  <feGaussianBlur stdDeviation="5"></feGaussianBlur>
-  </filter>
+
   <path d=""  fill="#09de09" filter="url(#Gauss)">${shadow}</path>
   <path d=""  fill="white">${ligth}</path>
 </svg>`;
@@ -203,9 +204,7 @@ function createSignX(animationDuration) {
   return `
 	<svg  class="cross" viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg">
-    <filter id="Gauss">
-  <feGaussianBlur stdDeviation="5"></feGaussianBlur>
-  </filter>
+
        <path d=""  fill="red" filter="url(#Gauss)">
          <animate   attributeName="d" dur="${dur}" fill="freeze"   values="M 17.5 72.5
             L 17.5 72.5
@@ -267,7 +266,7 @@ function createSignX(animationDuration) {
 `;
 }
 
-function animationBorder(element, duration) {
+function animationBorder(element, duration, color) {
   const height = element.offsetHeight;
   const width = element.offsetWidth;
 
@@ -276,14 +275,12 @@ function animationBorder(element, duration) {
 	 height="100%" width="100%" preserveAspectRatio="none"
 	 xmlns="http://www.w3.org/2000/svg" > 
   
-  <filter id="Gauss">
-    <feGaussianBlur stdDeviation="5"></feGaussianBlur>
-  </filter>
+
   
   <rect x="10" y="10" width="${width - 20}" height="${
     height - 20
   }" rx="20" ry="20"  
-    filter="url(#Gauss)" stroke="blue" stroke-width="10" stroke-linecap="round"
+    filter="url(#Gauss)" stroke="${color}" stroke-width="10" stroke-linecap="round"
     fill="none" vector-effect="non-scaling-stroke" 
     stroke-dasharray="${2 * (width - 20 + height - 20)}"  
     stroke-dashoffset="${2 * (width - 20 + height - 20)}">
@@ -308,9 +305,7 @@ function animationBorder(element, duration) {
 
 function createBackground() {
   const height = document.body.offsetHeight;
-  console.log('height: ', height);
   const width = document.body.offsetWidth;
-  console.log('width: ', width);
 
   const numberLines = Math.round(Math.max(height, width) / 13.25);
 
@@ -404,4 +399,54 @@ ${linesBlur}
     let max = Math.floor(maxVal);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+}
+
+function createMenu(fun) {
+  const signX = createSignX(0.3);
+
+  const menu = document.getElementById('game-menu');
+  menu.innerHTML = '';
+  menu.style.width = '400px';
+  animationBorder(menu, '1s', 'blue');
+
+  const move = document.createElement('div');
+  move.classList.add('move');
+  move.textContent = 'Move';
+  move.dataset.title = 'Move';
+  menu.append(move);
+
+  const windowSignMove = document.createElement('div');
+  windowSignMove.id = 'signMore';
+  windowSignMove.innerHTML = signX;
+  menu.append(windowSignMove);
+
+  const empty = document.createElement('div');
+  empty.style.flex = '1 1 100%';
+  menu.append(empty);
+
+  const restart = document.createElement('div');
+  restart.classList.add('gameButton');
+  restart.classList.add('gameButton__restart');
+  setTimeout(() => {
+    restart.style.fontSize = '28px';
+    restart.style.color = 'white';
+  }, 0);
+  restart.textContent = 'Restart';
+  restart.dataset.title = 'Restart';
+  restart.addEventListener('click', fun);
+  menu.append(restart);
+  animationBorder(restart, '1s', '#09de09');
+
+  const backMenu = document.createElement('div');
+  backMenu.classList.add('gameButton');
+  backMenu.classList.add('gameButton__menu');
+  setTimeout(() => {
+    backMenu.style.fontSize = '28px';
+    backMenu.style.color = 'white';
+  }, 0);
+  backMenu.textContent = 'Back to Menu';
+  backMenu.dataset.title = 'Back to Menu';
+  backMenu.addEventListener('click', loadStartMenu);
+  menu.append(backMenu);
+  animationBorder(backMenu, '1s', 'red');
 }
