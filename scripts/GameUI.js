@@ -8,6 +8,7 @@ export {
   animationBoardGrid,
   createBackground,
   createMenu,
+  isDraw,
 };
 
 import { loadStartMenu } from './script.js';
@@ -421,6 +422,7 @@ function createMenu(fun) {
   menu.append(windowSignMove);
 
   const empty = document.createElement('div');
+  empty.id = 'empty';
   empty.style.flex = '1 1 100%';
   menu.append(empty);
 
@@ -449,4 +451,15 @@ function createMenu(fun) {
   backMenu.addEventListener('click', loadStartMenu);
   menu.append(backMenu);
   animationBorder(backMenu, '1s', 'red');
+}
+
+function isDraw(boardMatrix) {
+  for (let row of boardMatrix) {
+    for (let item of row) {
+      if (item === '') {
+        return false;
+      }
+    }
+  }
+  return true;
 }

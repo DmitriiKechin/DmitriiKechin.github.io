@@ -12,6 +12,7 @@ import {
   animationBoardGrid,
   createBackground,
   createMenu,
+  isDraw,
 } from './GameUI.js';
 
 const ANIMATION_DURATION = 0.5;
@@ -153,12 +154,29 @@ function click(target, isFirstPlayer) {
 
   target.style.cursor = 'auto';
 
-  if (isWinner(boardMatrix, isFirstPlayer)) {
+  if (isWinner(boardMatrix)) {
     moveAIFinish = false;
-    isFirstPlayer = true;
     log('Победа');
     return;
   }
+
+  if (isDraw(boardMatrix)) {
+    moveAIFinish = false;
+    log('Ничья');
+
+    const pageGame = document.getElementById('game');
+    const banner = document.createElement('div');
+    banner.classList.add('victory');
+    pageGame.append(banner);
+
+    const messangeDrow = document.getElementById('empty');
+    messangeDrow.classList.add('move');
+    messangeDrow.textContent = 'Drow';
+    messangeDrow.dataset.title = 'Drow';
+
+    return;
+  }
+
   setTimeout(clickAI, ANIMATION_DURATION * 1000);
 }
 
@@ -205,6 +223,8 @@ function preStartGame() {
     startMenu.remove();
   }
 
+  isFirstPlayer = true;
+
   return page;
 }
 
@@ -239,15 +259,15 @@ function startlargeGame() {
 
   const page = preStartGame();
 
-  const row = Math.round((page.offsetHeight * 0.95) / 70);
-  const col = Math.round((page.offsetWidth * 0.95) / 70);
+  const row = Math.round((page.offsetHeight * 0.94) / 70);
+  const col = Math.round((page.offsetWidth * 0.94) / 70);
 
   startGame(page, row, col);
   boardMatrix = createBoardMatrix(row, col);
 
   const board = document.querySelector('.board');
-  board.style.maxWidth = '95%';
-  board.style.maxHeight = '95%';
+  board.style.maxWidth = '94%';
+  board.style.maxHeight = '94%';
 
   setTimeout(animationBoardGrid, 0);
 }

@@ -1,5 +1,5 @@
 export { isWinner };
-function isWinner(boardMatrix, isFirstPlayer) {
+function isWinner(boardMatrix) {
   const size = boardMatrix.length;
   let lineSize;
   if (size < 5) {
@@ -9,7 +9,7 @@ function isWinner(boardMatrix, isFirstPlayer) {
   }
 
   for (let row = 0; row < size; row++) {
-    for (let col = 0; col < size; col++) {
+    for (let col = 0; col < boardMatrix[0].length; col++) {
       if (boardMatrix[row][col]) {
         if (searchVictoryLine(boardMatrix, row, col, lineSize)) {
           return true;
