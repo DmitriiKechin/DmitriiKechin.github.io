@@ -2,11 +2,11 @@ const staticCacheName = 'static-v1';
 
 const assetUrls = [
   'index.html',
-  '/css/style.css',
-  '/js/AI.js',
-  '/js/GameUI.js',
-  '/js/script.js',
-  '/js/victory.js',
+  'css/style.css',
+  'js/AI.js',
+  'js/GameUI.js',
+  'js/script.js',
+  'js/victory.js',
 ];
 
 self.addEventListener('install', async (event) => {
