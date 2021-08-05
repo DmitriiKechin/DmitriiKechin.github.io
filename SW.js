@@ -3,10 +3,10 @@ const staticCacheName = 'static-v1';
 const assetUrls = [
   'index.html',
   'css/style.css',
-  'js/AI.js',
-  'js/GameUI.js',
-  'js/script.js',
-  'js/victory.js',
+  'scripts/AI.js',
+  'scripts/GameUI.js',
+  'scripts/script.js',
+  'scripts/victory.js',
 ];
 
 self.addEventListener('install', async (event) => {
@@ -15,12 +15,12 @@ self.addEventListener('install', async (event) => {
 });
 
 self.addEventListener('activate', async (event) => {
-  const cacheNames = await caches.keys();
+  /*const cacheNames = await caches.keys();
   await Promise.all(
     cacheNames
       .filter((name) => name !== staticCacheName)
       .map((name) => caches.delete(name))
-  );
+  );*/
 });
 
 self.addEventListener('fetch', (event) => {
