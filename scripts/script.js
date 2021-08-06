@@ -25,17 +25,17 @@ const moveAI = new Event('click', { bubbles: true });
 let moveAIFinish = true;
 
 window.addEventListener('load', loadStartMenu());
-/*
+
 window.addEventListener('load', async () => {
   if (navigator.serviceWorker) {
     try {
-      await navigator.serviceWorker.register('SW.js');
+      await navigator.serviceWorker.register('/SW.js');
       console.log('Service worcer register succes');
     } catch (e) {
       console.log('Service worcer register fail');
     }
   }
-});*/
+});
 
 export function loadStartMenu() {
   createBackground();

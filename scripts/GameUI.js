@@ -268,8 +268,16 @@ function createSignX(animationDuration) {
 }
 
 function animationBorder(element, duration, color) {
-  const height = element.offsetHeight;
-  const width = element.offsetWidth;
+  let height = element.offsetHeight;
+  let width = element.offsetWidth;
+
+  if (!height) {
+    height = 20;
+  }
+
+  if (!width) {
+    width = 20;
+  }
 
   element.innerHTML += `
   <svg class="border" viewBox="0 0 ${width} ${height}"
@@ -328,17 +336,17 @@ function createBackground() {
     let x1;
     let y1;
 
-    if (x0 - width / 3 > 0 && x0 + width / 3 < width) {
+    if (x0 - width / 3 >= 0 && x0 + width / 3 <= width) {
       x1 = random(x0 - width / 3, x0 + width / 3);
     }
-    if (x0 - width / 3 < 0 && x0 + width / 3 < width) {
+    if (x0 - width / 3 < 0 && x0 + width / 3 <= width) {
       x1 = random(0, x0 + width / 3);
     }
     if (x0 - width / 3 > 0 && x0 + width / 3 > width) {
       x1 = random(x0 - width / 3, width);
     }
 
-    if (y0 - height / 3 > 0 && y0 + height / 3 < height) {
+    if (y0 - height / 3 >= 0 && y0 + height / 3 <= height) {
       y1 = random(y0 - height / 3, y0 + height / 3);
     }
     if (y0 - height / 3 < 0 && y0 + height / 3 < height) {
@@ -376,15 +384,14 @@ function createBackground() {
   }
 
   background.innerHTML = `
-	
-	  <svg class="border" viewBox="0 0 ${width} ${height}"
+	 <svg class="border" viewBox="0 0 ${width} ${height}"
 	height="100%" width="100%" preserveAspectRatio="none"
 	xmlns="http://www.w3.org/2000/svg">
 ${lines}
 	</svg>
 	`;
+
   backgroundBlur.innerHTML = `
-	
 	<svg class="border" viewBox="0 0 ${width} ${height}"
 height="100%" width="100%" preserveAspectRatio="none"
 xmlns="http://www.w3.org/2000/svg">
