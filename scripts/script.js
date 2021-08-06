@@ -25,7 +25,7 @@ const moveAI = new Event('click', { bubbles: true });
 let moveAIFinish = true;
 
 window.addEventListener('load', loadStartMenu());
-
+/*
 window.addEventListener('load', async () => {
   if (navigator.serviceWorker) {
     try {
@@ -35,7 +35,7 @@ window.addEventListener('load', async () => {
       console.log('Service worcer register fail');
     }
   }
-});
+});*/
 
 export function loadStartMenu() {
   createBackground();
