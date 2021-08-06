@@ -1,3 +1,4 @@
+'use strict';
 const staticCacheName = 'static-v1';
 
 const assetUrls = [
