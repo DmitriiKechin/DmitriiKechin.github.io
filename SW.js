@@ -1,5 +1,5 @@
 'use strict';
-const staticCacheName = 'static-v2';
+const staticCacheName = 'static-v5';
 
 const assetUrls = [
   'index.html',
@@ -13,6 +13,7 @@ const assetUrls = [
 self.addEventListener('install', async (event) => {
   const cache = await caches.open(staticCacheName);
   await cache.addAll(assetUrls);
+  skipWaiting();
 });
 
 self.addEventListener('activate', async (event) => {

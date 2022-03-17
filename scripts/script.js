@@ -37,6 +37,10 @@ window.addEventListener('load', async () => {
   }
 });
 
+navigator.serviceWorker.addEventListener('controllerchange', () =>
+  window.location.reload()
+);
+
 export function loadStartMenu() {
   createBackground();
   const page = document.getElementById('game');
